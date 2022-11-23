@@ -15,12 +15,41 @@ def registro():
         aux3=True
         while aux3 == True:
             letras=input("Ingrese 4 LETRAS para la cota: ")
-            aux3 = False
+            if letras.isalpha() == True and len(letras) == 4:
+                aux3 = False
+            else:
+                print ("ingreso valores invalidos, intente nuevamente")
+                aux3 = True
+            
         aux4=True
         while aux4 == True:
             numeros=input("Ingrese 4 NUMEROS para la cota: ")
-            aux4 = False
-
+            if numeros.isdigit() == True and len(numeros) == 4:
+                aux4 = False
+            else:
+                print ("ingreso valores invalidos, intente nuevamente")
+                aux4 = True
+             
+        while True:
+            try:
+                precio = int(input("Precio de la obra: "))
+            except ValueError:
+                print("Debes escribir un número.")
+                continue
+            if precio < 0:
+                print("Debes escribir un número positivo.")
+                continue
+            else:
+                break 
+        aux5=True
+        while aux5 == True:
+            status=input("ingrese Estado de la pintura (EXHIBICION/MANTENIMIENTO): ")
+            status = status.upper
+            if status == "EXHIBICION" or status == "MANTENIMIENTO":
+                aux5 = False
+            else:
+                print ("ingreso valores invalidos, ingrese (EXHIBICION/MANTENIMIENTO)")
+                aux4 = True
 
     
                 
