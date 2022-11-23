@@ -1,6 +1,6 @@
 import time
 import json
-
+cuadros = {}
 def registro():
     aux=True
     while aux == True:
@@ -63,6 +63,7 @@ def registro():
 
         with open('data.json', 'w') as file:
             json.dump(data, file, indent=4)
+
         time.sleep(1)
         print("\nHa registrado correctamente una pintura, felicidades\n\n")
         main()    
@@ -91,7 +92,14 @@ def main():
             registro()
             aux = False
         elif seleccion == "2":
-            print ("Modulo de Consulta!!")
+            with open('data.json') as file:
+                data = json.load(file)
+                for cuadro in data['cuadros']:
+                    print('nombre:', cuadro['nombre'])
+                    print('cota:', cuadro['cota'])
+                    print('precio:', cuadro['precio'])
+                    print('status:', cuadro['status'])
+                    print('')
             aux = False
         elif seleccion == "3":
             print ("Modulo de Poner en mantenimiento!!")
