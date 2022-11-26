@@ -1,6 +1,13 @@
 import time
 import json
-cuadros = {}
+nombres = ["cuadro1", "cuadro2", "cuadro3", "cuadro4", "cuadro5", "cuadro6", "cuadro7", "cuadro8", "cuadro9", "cuadro10"]
+cotas = ["cota1234", "cota1334", "cota1434", "cota1534","cota1634", "cota1734", "cota1834", "cota1934", "cota2034", "cota2134"]
+precios=[1234,15468,74846,48646,654654,84484,87684,8648461,168498,168468]
+statuss=["M","M","M","M","M","E","E","E","E","E"]
+elim= ["A","A","A","A","A","E","E","E","E","E"]
+nombre_index=["cuadro1", "cuadro2", "cuadro3", "cuadro4", "cuadro5", "cuadro6", "cuadro7", "cuadro8", "cuadro9", "cuadro10"]
+cotas_index = ["cota1234", "cota1334", "cota1434", "cota1534","cota1634", "cota1734", "cota1834", "cota1934", "cota2034", "cota2134"]
+
 def registro():
     aux=True
     while aux == True:
@@ -44,45 +51,180 @@ def registro():
                 break 
         aux5=True
         while aux5 == True:
-            status=input("\ningrese Estado de la pintura (EXHIBICION/MANTENIMIENTO): ")
+            status=input("\ningrese Estado de la pintura (M/E): ")
             status = status.upper()
-            if status == "EXHIBICION" :
+            if status == "M" :
                 aux5 = False
-            elif status == "MANTENIMIENTO" :
+            elif status == "E" :
                 aux5 = False
             else:
-                print ("\ningreso valores invalidos, ingrese (EXHIBICION/MANTENIMIENTO)")
-                aux4 = True
-        data = {}
-        data['cuadros'] = []
-        data['cuadros'].append({
-            'nombre': nombre,
-            'cota': cota,
-            'precio': precio,
-            'status': status})
-
-        with open('data.json', 'w') as file:
-            json.dump(data, file, indent=4)
+                print ("\ningreso valores invalidos, ingrese (M/E)")
+                aux5 = True
+        nombres.append(nombre)
+        nombre_index.append(nombre)
+        cotas.append(cota)
+        cotas_index.append(cota)   
+        precios.append(precio)
+        statuss.append(status)
 
         time.sleep(1)
         print("\nHa registrado correctamente una pintura, felicidades\n\n")
         main()    
 
+
+def busqueda():
+    aux10=True
+    while aux10 == True:
+        busqueda = input("""Desea buscar por nombre o por cota?:
+                            1)buscar por nombre             2)buscar por cota
+                                                99)salir
+         """)
+        while True:
+            if busqueda == "1":
+                try:
+                    nombre_busqueda = input("ingrese el nombre de la obra a buscar: ")
+                    nombre_index.index(nombre_busqueda)
+                    n = nombre_index.index(nombre_busqueda)
+                    if elim[n] =="A":
+                        print("Nombre: ",nombres[n])
+                        print("Cota: ",cotas[n])
+                        print("Precio: ",precios[n])
+                        print("Estado: ",statuss[n])
+                        break
+                    else:
+                        print("La busqueda que realizo no se encuentra registrada.")
+                        continue    
+                except ValueError:
+                    print("La busqueda que realizo no se encuentra registrada.")
+                    continue
+                  
+            elif busqueda == "2":
+                try:
+                    cota_busqueda = input("ingrese la cota de la obra a buscar: ")
+                    cotas_index.index(cota_busqueda)
+                    n = cotas_index.index(cota_busqueda)
+                    if elim[n] =="A":
+                        print("Nombre: ",nombres[n])
+                        print("Cota: ",cotas[n])
+                        print("Precio: ",precios[n])
+                        print("Estado: ",statuss[n])
+                        break
+                    else:
+                        print("La busqueda que realizo no se encuentra registrada.")
+                        continue    
+                except ValueError:
+                    print("La busqueda que realizo no se encuentra registrada.")
+                    continue
+            elif busqueda == "99":
+                main()
+            else:
+                print("Usted ingreso una opcion invalida, favor intente nuevamente!")
+                break
+
+def modificar():           
+    while True:
+        try:
+            nombre_busqueda = input("ingrese el nombre de la obra a modificar: ")
+            nombre_index.index(nombre_busqueda)
+            n = nombre_index.index(nombre_busqueda)
+            print("Nombre: ",nombres[n])
+            print("Cota: ",cotas[n])
+            print("Precio: ",precios[n])
+            print("Estado: ",statuss[n])
+            print("\n\n")
+            aux5=True
+            while aux5 == True:
+                status=input("\ningrese Estado de la pintura (M/E): ")
+                status = status.upper()
+                if status == "E":
+                    statuss[n]= status
+                    print("Nombre: ",nombres[n])
+                    print("Cota: ",cotas[n])
+                    print("Precio: ",precios[n])
+                    print("Estado: ",statuss[n])
+                    print("\n")
+                    aux5 = False
+                    print("Modificacion exitosa!")
+                    main()
+                if status == "M":
+                    statuss[n] = status
+                    print("Nombre: ",nombres[n])
+                    print("Cota: ",cotas[n])
+                    print("Precio: ",precios[n])
+                    print("Estado: ",statuss[n])
+                    print("\n")
+                    aux5 = False
+                    print("Modificacion exitosa!")
+                    main()
+                else:
+                    print("\nIngreso un dato invalido")
+                    aux5 = True
+            break
+        except ValueError:
+                    print("La busqueda que realizo no se encuentra registrada.")
+                    continue
+                  
+
+def eliminar():
+    while True:
+        try:
+            nombre_busqueda = input("ingrese el nombre de la obra a eliminar: ")
+            nombre_index.index(nombre_busqueda)
+            n = nombre_index.index(nombre_busqueda)
+            print("Nombre: ",nombres[n])
+            print("Cota: ",cotas[n])
+            print("Precio: ",precios[n])
+            print("Estado: ",statuss[n])
+            print("Eliminacion: ",elim[n])
+            print("\n\n")
+            aux5=True
+            while aux5 == True:
+                eliminar=input("\ningrese Estado de la pintura (A/E): ")
+                eliminar = eliminar.upper()
+                if eliminar == "E":
+                    elim[n]= eliminar
+                    print("Nombre: ",nombres[n])
+                    print("Cota: ",cotas[n])
+                    print("Precio: ",precios[n])
+                    print("Estado: ",statuss[n])
+                    print("Eliminacion: ",elim[n])
+                    print("\n")
+                    aux5 = False
+                    print("Modificacion exitosa!")
+                    main()
+                if eliminar == "A":
+                    elim[n] = eliminar
+                    print("Nombre: ",nombres[n])
+                    print("Cota: ",cotas[n])
+                    print("Precio: ",precios[n])
+                    print("Estado: ",statuss[n])
+                    print("Eliminacion: ",elim[n])
+                    print("\n")
+                    aux5 = False
+                    print("Modificacion exitosa!")
+                    main()
+                else:
+                    print("\nIngreso un dato invalido")
+                    aux5 = True
+            break
+        except ValueError:
+                    print("La busqueda que realizo no se encuentra registrada.")
+                    continue
+
+def compactador():
+    print("MODULO DE ELIMINACION FISICA")
+
+
     
-                
-               
-
-
-
-
 
 def main():
-    print ("Bienvenido!!")
+    print ("\nBienvenido!!")
 
     print ("""Que desea hacer?
-        1)Registrar una pintura             2)hacer una consulta
-        3)Poner Pintura en mantenimiento    4)Poner Pintura en Exhibicion
-        5)Eliminar Pintura                  6)Compactador
+        1)Registrar una pintura             2)Hacer una consulta
+        3)Modificar Status                  4)Eliminar Pintura           
+        5)Compactador                       99)Cerrar programa
+                            
         """)
     aux=True
     while aux == True:
@@ -92,28 +234,20 @@ def main():
             registro()
             aux = False
         elif seleccion == "2":
-            with open('data.json') as file:
-                data = json.load(file)
-                for cuadro in data['cuadros']:
-                    print('nombre:', cuadro['nombre'])
-                    print('cota:', cuadro['cota'])
-                    print('precio:', cuadro['precio'])
-                    print('status:', cuadro['status'])
-                    print('')
-            aux = False
+            busqueda()
         elif seleccion == "3":
-            print ("Modulo de Poner en mantenimiento!!")
+            modificar()
             aux = False
         elif seleccion == "4":
-            print ("Modulo de Poner en Exhibicion!!")
+            eliminar()
             aux = False
         elif seleccion == "5":
-            print ("Modulo de Eliminar!!")
+            compactador()
             aux = False
-        elif seleccion == "6":
-            print ("Modulo de Compactar!!")
-            aux = False
+        elif seleccion == "99":
+            break
         else:
             print ("Ingresó un valor inválido")
             aux = True
 main()
+
