@@ -1,27 +1,32 @@
 import time
-import json
-nombres = ["cuadro1", "cuadro2", "cuadro3", "cuadro4", "cuadro5", "cuadro6", "cuadro7", "cuadro8", "cuadro9", "cuadro10"]
-cotas = ["cota1234", "cota1334", "cota1434", "cota1534","cota1634", "cota1734", "cota1834", "cota1934", "cota2034", "cota2134"]
-precios=[1234,15468,74846,48646,654654,84484,87684,8648461,168498,168468]
-statuss=["M","M","M","M","M","E","E","E","E","E"]
-elim= ["A","A","A","A","A","E","E","E","E","E"]
-nombre_index=["cuadro1", "cuadro2", "cuadro3", "cuadro4", "cuadro5", "cuadro6", "cuadro7", "cuadro8", "cuadro9", "cuadro10"]
-cotas_index = ["cota1234", "cota1334", "cota1434", "cota1534","cota1634", "cota1734", "cota1834", "cota1934", "cota2034", "cota2134"]
+from xlrd import open_workbook
+import xlwt
+
+
+nombres = []
+cotas = []
+precios=[]
+statuss=[]
+elim= []
+nombre_index=[]
+cotas_index = []
 
 def registro():
     aux=True
     while aux == True:
         aux2=True
         while aux2 == True:
-            nombre=input("\ningrese el nombre del cuadro:")
+            nombre=input("\ningrese el nombre del cuadro: ")
             if len(nombre) > 30:
                 print("Nombre del cuadro demasiado largo, favor no exceder los 30 caracteres, el nombre que ingreso posee" , len(nombre), " caracteres" )
                 aux2 = True 
             elif len(nombre) < 30:          
                 aux2 = False
+        
         aux3=True
         while aux3 == True:
             letras=input("\nIngrese 4 LETRAS para la cota: ")
+            
             if letras.isalpha() == True and len(letras) == 4:
                 aux3 = False
             else:
@@ -37,7 +42,7 @@ def registro():
                 print ("ingreso valores invalidos, intente nuevamente")
                 aux4 = True
         cota = letras+numeros   
-         
+        
         while True:
             try:
                 precio = int(input("\nPrecio de la obra: "))
@@ -60,16 +65,18 @@ def registro():
             else:
                 print ("\ningreso valores invalidos, ingrese (M/E)")
                 aux5 = True
+        q="A"
         nombres.append(nombre)
         nombre_index.append(nombre)
         cotas.append(cota)
         cotas_index.append(cota)   
         precios.append(precio)
         statuss.append(status)
-
+        elim.append(q)
         time.sleep(1)
         print("\nHa registrado correctamente una pintura, felicidades\n\n")
-        main()    
+        main()
+        break    
 
 
 def busqueda():
@@ -212,18 +219,80 @@ def eliminar():
                     continue
 
 def compactador():
-    print("MODULO DE ELIMINACION FISICA")
+    fichero_distancias = xlwt.Workbook()
+    datos = fichero_distancias.add_sheet("datos")
+    for i in elim:
+        if i != "E":
+            for i in range(len(nombres)):
+                datos.write(i+1, 0, nombres[i])
+            for i in range(len(cotas)):
+                datos.write(i+1, 1, cotas[i])
+            for i in range(len(precios)):
+                datos.write(i+1, 2, precios[i])
+            for i in range(len(statuss)):
+                datos.write(i+1, 3, statuss[i])
+            for i in range(len(elim)):
+                datos.write(i+1, 4, elim[i])
+            for i in range(len(nombre_index)):
+                datos.write(i+1, 5, nombre_index[i])
+            for i in range(len(cotas_index)):
+                datos.write(i+1, 6, cotas_index[i])
+
+    fichero_distancias.save("CUADROS.xls")
+
+
+def guardar_excel():
+    fichero_distancias = xlwt.Workbook()
+    datos = fichero_distancias.add_sheet("datos")
+
+    for i in range(len(nombres)):
+        datos.write(i+1, 0, nombres[i])
+    for i in range(len(cotas)):
+        datos.write(i+1, 1, cotas[i])
+    for i in range(len(precios)):
+        datos.write(i+1, 2, precios[i])
+    for i in range(len(statuss)):
+        datos.write(i+1, 3, statuss[i])
+    for i in range(len(elim)):
+        datos.write(i+1, 4, elim[i])
+    for i in range(len(nombre_index)):
+        datos.write(i+1, 5, nombre_index[i])
+    for i in range(len(cotas_index)):
+        datos.write(i+1, 6, cotas_index[i])
+
+    fichero_distancias.save("CUADROS.xls")
 
 
     
 
 def main():
+    wb = open_workbook('CUADROS.xls') 
+    sheet = wb.sheet_by_index(0)
+    sheet.cell_value(0, 0)
+    column_index = 0
+    column_index1 = 5
+    column_index2 = 1
+    column_index3 = 6
+    column_index4 = 2
+    column_index5 = 3
+    column_index6 = 4
+    column = sheet.cell_value(1, column_index)
+    for row in range(1, sheet.nrows):
+        nombres.append(sheet.cell_value(row, column_index))
+        nombre_index.append(sheet.cell_value(row, column_index1))
+        cotas.append(sheet.cell_value(row, column_index2))
+        cotas_index.append(sheet.cell_value(row, column_index3))
+        precios.append(sheet.cell_value(row, column_index4))
+        statuss.append(sheet.cell_value(row, column_index5))
+        elim.append(sheet.cell_value(row, column_index6))
+    print(nombres)
     print ("\nBienvenido!!")
 
     print ("""Que desea hacer?
         1)Registrar una pintura             2)Hacer una consulta
         3)Modificar Status                  4)Eliminar Pintura           
-        5)Compactador                       99)Cerrar programa
+        5)Compactador                       6)Guardar datos
+        99)Cerrar programa
                             
         """)
     aux=True
@@ -244,10 +313,13 @@ def main():
         elif seleccion == "5":
             compactador()
             aux = False
+        elif seleccion == "6":
+            guardar_excel()
+            aux = False
         elif seleccion == "99":
+            aux = False
             break
         else:
             print ("Ingresó un valor inválido")
             aux = True
 main()
-
