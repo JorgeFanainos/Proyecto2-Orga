@@ -285,7 +285,7 @@ def main():
         precios.append(sheet.cell_value(row, column_index4))
         statuss.append(sheet.cell_value(row, column_index5))
         elim.append(sheet.cell_value(row, column_index6))
-    print(nombres)
+
     print ("\nBienvenido!!")
 
     print ("""Que desea hacer?
