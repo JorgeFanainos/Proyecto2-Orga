@@ -205,11 +205,15 @@ def eliminar():
             print("Eliminacion: ",elim[n])
             print("\n\n")
             aux5=True
+            
             while aux5 == True:
                 eliminar=input("\ningrese Estado de la pintura (A/E): ")
                 eliminar = eliminar.upper()
            
                 if eliminar == "E" :
+                    for i in elim:
+                        if i == nombre_busqueda+" A":
+                            elim.remove(i)
                     elim[n] = nombre_busqueda+" "+eliminar
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
@@ -222,6 +226,9 @@ def eliminar():
                     aux154=False
                     break
                 if eliminar == "A":
+                    for i in elim:
+                        if i == nombre_busqueda+" E":
+                            elim.remove(i)
                     elim[n] = nombre_busqueda+" "+eliminar
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
