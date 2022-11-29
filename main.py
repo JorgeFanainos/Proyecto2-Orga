@@ -22,6 +22,10 @@ def registro():
                 aux2 = True 
             elif len(nombre) < 30:          
                 aux2 = False
+            for name in nombres:
+                if nombre == name:
+                    print("Nombre del cuadro ya ingresado, intente con otro")
+                    aux2 = True
         
         aux3=True
         while aux3 == True:
@@ -38,10 +42,16 @@ def registro():
             numeros=input("\nIngrese 4 NUMEROS para la cota: ")
             if numeros.isdigit() == True and len(numeros) == 4:
                 aux4 = False
+                cota = letras+numeros
+                for cot in cotas:
+                    if cota == cot:
+                        print("Cota del cuadro ya ingresado, intente con otro")
+                        aux4 = True   
             else:
                 print ("ingreso valores invalidos, intente nuevamente")
                 aux4 = True
-        cota = letras+numeros   
+        
+        
         
         while True:
             try:
@@ -58,6 +68,7 @@ def registro():
         while aux5 == True:
             status=input("\ningrese Estado de la pintura (M/E): ")
             status = status.upper()
+            status_final = nombre + " "+status
             if status == "M" :
                 aux5 = False
             elif status == "E" :
@@ -65,13 +76,13 @@ def registro():
             else:
                 print ("\ningreso valores invalidos, ingrese (M/E)")
                 aux5 = True
-        q="A"
+        q=nombre+" A"
         nombres.append(nombre)
         nombre_index.append(nombre)
         cotas.append(cota)
         cotas_index.append(cota)   
         precios.append(precio)
-        statuss.append(status)
+        statuss.append(status_final)
         elim.append(q)
         time.sleep(1)
         print("\nHa registrado correctamente una pintura, felicidades\n\n")
@@ -92,7 +103,7 @@ def busqueda():
                     nombre_busqueda = input("ingrese el nombre de la obra a buscar: ")
                     nombre_index.index(nombre_busqueda)
                     n = nombre_index.index(nombre_busqueda)
-                    if elim[n] =="A":
+                    if elim[n] ==nombre_busqueda+" A":
                         print("Nombre: ",nombres[n])
                         print("Cota: ",cotas[n])
                         print("Precio: ",precios[n])
@@ -110,7 +121,7 @@ def busqueda():
                     cota_busqueda = input("ingrese la cota de la obra a buscar: ")
                     cotas_index.index(cota_busqueda)
                     n = cotas_index.index(cota_busqueda)
-                    if elim[n] =="A":
+                    if elim[n] ==nombre_busqueda+" A":
                         print("Nombre: ",nombres[n])
                         print("Cota: ",cotas[n])
                         print("Precio: ",precios[n])
@@ -128,8 +139,9 @@ def busqueda():
                 print("Usted ingreso una opcion invalida, favor intente nuevamente!")
                 break
 
-def modificar():           
-    while True:
+def modificar(): 
+    aux145 =True          
+    while aux145==True:
         try:
             nombre_busqueda = input("ingrese el nombre de la obra a modificar: ")
             nombre_index.index(nombre_busqueda)
@@ -143,8 +155,9 @@ def modificar():
             while aux5 == True:
                 status=input("\ningrese Estado de la pintura (M/E): ")
                 status = status.upper()
+                status_final2 = nombre_busqueda+" "+status
                 if status == "E":
-                    statuss[n]= status
+                    statuss[n] = status_final2
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
                     print("Precio: ",precios[n])
@@ -152,28 +165,35 @@ def modificar():
                     print("\n")
                     aux5 = False
                     print("Modificacion exitosa!")
-                    main()
+                    aux145 =False 
+                    break
+          
                 if status == "M":
-                    statuss[n] = status
+                    statuss[n] = status_final2 
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
                     print("Precio: ",precios[n])
                     print("Estado: ",statuss[n])
                     print("\n")
                     aux5 = False
+                    aux145 =False
                     print("Modificacion exitosa!")
-                    main()
+                    break
+                    
                 else:
                     print("\nIngreso un dato invalido")
                     aux5 = True
+                    
             break
         except ValueError:
                     print("La busqueda que realizo no se encuentra registrada.")
-                    continue
+                    aux145 =True
+    main()
                   
 
 def eliminar():
-    while True:
+    aux154= True
+    while aux154== True:
         try:
             nombre_busqueda = input("ingrese el nombre de la obra a eliminar: ")
             nombre_index.index(nombre_busqueda)
@@ -188,8 +208,9 @@ def eliminar():
             while aux5 == True:
                 eliminar=input("\ningrese Estado de la pintura (A/E): ")
                 eliminar = eliminar.upper()
-                if eliminar == "E":
-                    elim[n]= eliminar
+           
+                if eliminar == "E" :
+                    elim[n] = nombre_busqueda+" "+eliminar
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
                     print("Precio: ",precios[n])
@@ -198,9 +219,10 @@ def eliminar():
                     print("\n")
                     aux5 = False
                     print("Modificacion exitosa!")
-                    main()
+                    aux154=False
+                    break
                 if eliminar == "A":
-                    elim[n] = eliminar
+                    elim[n] = nombre_busqueda+" "+eliminar
                     print("Nombre: ",nombres[n])
                     print("Cota: ",cotas[n])
                     print("Precio: ",precios[n])
@@ -209,34 +231,41 @@ def eliminar():
                     print("\n")
                     aux5 = False
                     print("Modificacion exitosa!")
-                    main()
+                    
+                    aux154=False
+                    break
                 else:
                     print("\nIngreso un dato invalido")
                     aux5 = True
+            
             break
         except ValueError:
                     print("La busqueda que realizo no se encuentra registrada.")
-                    continue
+                    aux154=True
+    main()
 
 def compactador():
+    
+
     fichero_distancias = xlwt.Workbook()
     datos = fichero_distancias.add_sheet("datos")
-    for i in elim:
-        if i != "E":
-            for i in range(len(nombres)):
-                datos.write(i+1, 0, nombres[i])
-            for i in range(len(cotas)):
-                datos.write(i+1, 1, cotas[i])
-            for i in range(len(precios)):
-                datos.write(i+1, 2, precios[i])
-            for i in range(len(statuss)):
-                datos.write(i+1, 3, statuss[i])
-            for i in range(len(elim)):
-                datos.write(i+1, 4, elim[i])
-            for i in range(len(nombre_index)):
-                datos.write(i+1, 5, nombre_index[i])
-            for i in range(len(cotas_index)):
-                datos.write(i+1, 6, cotas_index[i])
+    for nombre in nombres:
+        for w in elim:
+            if w ==nombre+" A":
+                for i in range(len(nombres)):
+                    datos.write(i, 0, nombres[i])
+                for i in range(len(cotas)):
+                    datos.write(i, 1, cotas[i])
+                for i in range(len(precios)):
+                    datos.write(i, 2, precios[i])
+                for i in range(len(statuss)):
+                    datos.write(i, 3, statuss[i])
+                for i in range(len(elim)):
+                    datos.write(i, 4, elim[i])
+                for i in range(len(nombre_index)):
+                    datos.write(i, 5, nombre_index[i])
+                for i in range(len(cotas_index)):
+                    datos.write(i, 6, cotas_index[i])
 
     fichero_distancias.save("CUADROS.xls")
 
@@ -246,19 +275,19 @@ def guardar_excel():
     datos = fichero_distancias.add_sheet("datos")
 
     for i in range(len(nombres)):
-        datos.write(i+1, 0, nombres[i])
+        datos.write(i, 0, nombres[i])
     for i in range(len(cotas)):
-        datos.write(i+1, 1, cotas[i])
+        datos.write(i, 1, cotas[i])
     for i in range(len(precios)):
-        datos.write(i+1, 2, precios[i])
+        datos.write(i, 2, precios[i])
     for i in range(len(statuss)):
-        datos.write(i+1, 3, statuss[i])
+        datos.write(i, 3, statuss[i])
     for i in range(len(elim)):
-        datos.write(i+1, 4, elim[i])
+        datos.write(i, 4, elim[i])
     for i in range(len(nombre_index)):
-        datos.write(i+1, 5, nombre_index[i])
+        datos.write(i, 5, nombre_index[i])
     for i in range(len(cotas_index)):
-        datos.write(i+1, 6, cotas_index[i])
+        datos.write(i, 6, cotas_index[i])
 
     fichero_distancias.save("CUADROS.xls")
 
@@ -276,8 +305,8 @@ def main():
     column_index4 = 2
     column_index5 = 3
     column_index6 = 4
-    column = sheet.cell_value(1, column_index)
-    for row in range(1, sheet.nrows):
+    column = sheet.cell_value(0, column_index)
+    for row in range(0, sheet.nrows):
         nombres.append(sheet.cell_value(row, column_index))
         nombre_index.append(sheet.cell_value(row, column_index1))
         cotas.append(sheet.cell_value(row, column_index2))
@@ -285,7 +314,29 @@ def main():
         precios.append(sheet.cell_value(row, column_index4))
         statuss.append(sheet.cell_value(row, column_index5))
         elim.append(sheet.cell_value(row, column_index6))
+    for name in nombres:
+        if nombres.count(name) > 1:
+            nombres.remove(name)
+    for namein in nombre_index:
+        if nombre_index.count(namein) > 1:
+            nombre_index.remove(namein)
+    for cot in cotas:
+        if cotas.count(cot) > 1:
+            cotas.remove(cot)
+    for cotin in cotas_index:
+        if cotas_index.count(cotin) > 1:
+            cotas_index.remove(cotin)
+    for pre in precios:
+        if precios.count(pre) > 1:
+            precios.remove(pre)
+    for sta in statuss:
+        if statuss.count(sta) > 1:
+            statuss.remove(sta)
+    for el in elim:
+        if elim.count(el) > 1:
+            elim.remove(el)
 
+    print(nombres)
     print ("\nBienvenido!!")
 
     print ("""Que desea hacer?
